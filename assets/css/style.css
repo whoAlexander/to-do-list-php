@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "Archivo Black";
+  src: url("../fonts/ArchivoBlack-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SN Pro";
+  src: url("../fonts/SNPro-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   font-family: "SN Pro", sans-serif;
   box-sizing: border-box; /* Buena práctica extra para que el padding no rompa tamaños */
@@ -5,12 +19,10 @@
 
 body {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
+  justify-content: center;
+  align-items: center;
   height: 100vh; /* Ocupa toda la altura de la pantalla */
-  margin: 0; /* Importante para evitar scrollbars no deseados */
-
-  /* 1. Definimos el gradiente (igual que antes) */
+  margin: 0;
   background: linear-gradient(-45deg, #200e38, #6a0e47, #b50d57, #240b36);
 
   /* 2. EL TRUCO: Hacemos el fondo 4 veces más grande que la pantalla */
@@ -37,7 +49,8 @@ body {
 }
 
 .contenedor {
-  width: 900px; /* Ajusta el ancho según tus necesidades */
+  width: 90%; /* Ajusta el ancho según tus necesidades */
+  max-width: 800px;
   height: 400px; /* Ajusta la altura según tus necesidades */
   border-radius: 10px;
   padding: 20px;
@@ -48,7 +61,7 @@ body {
 }
 .title {
   font-family: "Archivo Black", sans-serif;
-  font-weight: 400;
+  font-weight: 600;
   font-style: normal;
   text-align: center;
   margin-bottom: 10px;
@@ -88,4 +101,23 @@ body {
   color: #80e9ff; /* Se ilumina más al pasar el mouse */
   text-shadow: 0 0 10px rgba(0, 212, 255, 0.5); /* Pequeño resplandor */
   text-decoration: underline;
+}
+
+/* Esto solo se aplica si la pantalla es menor a 768px (Tablets y Celulares) */
+@media (max-width: 768px) {
+  /* Achicamos el título */
+  .title {
+    font-size: 5rem; /* Ajusta este número hasta que te guste */
+    line-height: 1.2; /* Ayuda a que no se encimen las líneas */
+  }
+
+  /* Achicamos el subtítulo */
+  .fs-5 {
+    font-size: 1rem !important; /* Bootstrap usa !important a veces, así lo forzamos */
+  }
+
+  /* Ajustamos el padding del contenedor para ganar espacio */
+  .contenedor {
+    padding: 15px;
+  }
 }
