@@ -12,8 +12,8 @@
     <div class="contenedor">
         <h1 class="title">To Do List</h1>
             <p class="fs-5">Te ayuda a organizarte de una forma sencilla</p>
-        <button class="button-start mt-5">Empezar</button>
-        <p class="mt-3 ">ya tienes una cuenta? <a href="login.php" class="link-login"">Inicia Sesion</a></p>
-    </div>
+        <a href="register.php"><button class="button-start mt-5">Empezar</button></a>
+        <p class="mt-3 ">ya tienes una cuenta? <a href="login.php" class="link-login"">Iniciar Sesion</a></p>
+    </div>  
 </body>
 </html>

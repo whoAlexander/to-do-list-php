@@ -59,6 +59,16 @@ body {
   /* Asegúrate de que el texto sea blanco para que contraste bien */
   color: white;
 }
+.principal {
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #ffffff;
+}
 .title {
   font-family: "Archivo Black", sans-serif;
   font-weight: 600;
@@ -120,4 +130,50 @@ body {
   .contenedor {
     padding: 15px;
   }
+}
+
+/* Agrega esta clase nueva para asegurar el efecto */
+.glass-card {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.15
+  ) !important; /* El !important mata el blanco de Bootstrap */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra suave para darle profundidad */
+  color: white !important; /* Fuerza a que todo el texto dentro sea blanco */
+}
+
+/* Opcional: Esto ayuda a que los inputs (donde escribes) no se vean tan blancos brillantes */
+.glass-card input.form-control {
+  background: rgba(255, 255, 255, 0.9); /* Un blanco un poquito transparente */
+  border: none;
+  color: #333;
+}
+/* Alerta de Éxito (Verde Cristal) */
+.alert-glass-success {
+  background-color: rgba(25, 135, 84, 0.25) !important; /* Verde transparente */
+  border: 1px solid rgba(25, 135, 84, 0.5);
+  color: #a3cfbb !important; /* Texto verde claro legible */
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+/* Alerta de Error/Advertencia (Amarillo/Naranja Cristal) */
+.alert-glass-warning {
+  background-color: rgba(
+    255,
+    193,
+    7,
+    0.25
+  ) !important; /* Amarillo transparente */
+  border: 1px solid rgba(255, 193, 7, 0.5);
+  color: #ffe69c !important; /* Texto amarillo claro legible */
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  font-size: 0.9rem;
 }
