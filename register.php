@@ -1,7 +1,7 @@
 <?php require 'config/conexion.php'; ?>
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav-simple.php'; ?>
-
+ 
 <div class="card glass-card p-4" style="width: 450px; margin: auto;"> 
     
     <h2 class="text-center mt-4 mb-4" style="font-family: 'Archivo Black', sans-serif; font-size: 2rem;">Crear Cuenta</h2>

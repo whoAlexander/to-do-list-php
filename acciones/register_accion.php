@@ -29,6 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit();
             }
         }
+        // si se loguea desde login mandar a home.php
+
+
+
         $stmt->close();
     }
     $conexion->close();

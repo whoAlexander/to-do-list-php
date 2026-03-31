@@ -5,6 +5,7 @@ $username = "root";         // Usuario por defecto en XAMPP
 $password = "";             // Contraseña por defecto (vacía)
 $dbname = "to do list"; // Cambia esto por tu base de datos
 $message = "";
+$user = "";
 // Crear conexión
 $conexion = new mysqli($servername, $username, $password, $dbname);
 

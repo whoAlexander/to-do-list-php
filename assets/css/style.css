@@ -177,3 +177,33 @@ body {
   border-radius: 10px;
   font-size: 0.9rem;
 }
+
+/* --- ESTILOS DEL SIDEBAR --- */
+.glass-sidebar {
+    background-color: rgba(255, 255, 255, 0.05); /* Cristal más oscuro para contraste */
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    min-height: 80vh; /* Altura mínima */
+    
+}
+
+/* Estilo de los botones del menú */
+.glass-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efecto al pasar el mouse (hover) */
+.glass-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white !important;
+}
+
+/* Efecto cuando estás en esa página (activo) */
+.glass-sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+    color: white !important;
+}
