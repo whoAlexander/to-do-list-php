@@ -12,12 +12,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO usuarios (username, email, password) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO usuarios (username, email, clave) VALUES (?, ?, ?)";
 
     if ($stmt = $conexion->prepare($sql)) {
         $stmt->bind_param("sss", $username, $email, $password_hashed);
 
         if ($stmt->execute()) {
+            
             header("Location: ../login.php?mensaje=registrado");
             exit(); 
         } else {

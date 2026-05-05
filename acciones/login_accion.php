@@ -10,9 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Asumimos que en tu login.php los inputs tienen name="email" y name="password"
     $username = $_POST['username'];
     $password = $_POST['password'];
-
+    
     // 2. Buscamos al usuario en la base de datos por su correo
-    $sql = "SELECT id, username, password FROM usuarios WHERE username = ?";
+    $sql = "SELECT id_usuario, username, clave FROM usuarios WHERE username = ?";
     
     if ($stmt = $conexion->prepare($sql)) {
         $stmt->bind_param("s", $username);
@@ -25,11 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // 4. Verificamos la contraseña
             // password_verify compara la contraseña escrita con el Hash raro de la BD
-            if (password_verify($password, $usuario['password'])) {
+            if (password_verify($password, $usuario['clave'])) {
                 
                 // ¡ÉXITO! Las credenciales son correctas.
                 // Guardamos sus datos en la "mochila" de la sesión
-                $_SESSION['usuario_id'] = $usuario['id'];
+                $_SESSION['usuario_id'] = $usuario['id_usuario'];
                 $_SESSION['username'] = $usuario['username'];
 
                 // === 5. LA REDIRECCIÓN ===

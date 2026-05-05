@@ -207,3 +207,39 @@ body {
     font-weight: bold;
     color: white !important;
 }
+
+/* --- ESTILOS PARA FORMULARIO DE TAREAS (GLASS) --- */
+
+/* Estilo base para el Select y el botón Cancelar */
+.glass-form-element {
+    background-color: transparent !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+/* El hover: Fondo un poquito blanco translúcido (como el sidebar) */
+.glass-form-element:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Arreglo para que las opciones del select se lean bien al desplegarse */
+.glass-form-element option {
+    background-color: #5c2a4d; /* Color vino/oscuro que combina con tu fondo */
+    color: white;
+}
+
+/* Estilo destacado para el botón "Añadir tarea" */
+.glass-btn-primary {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.glass-btn-primary:hover {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+}
