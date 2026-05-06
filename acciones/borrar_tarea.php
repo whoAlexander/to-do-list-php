@@ -37,9 +37,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 } else {
     $_SESSION['alerta_error'] = "No se especificó qué tarea eliminar.";
+    $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
+    header("Location: " . $ruta_retorno);
+    exit();
 }
 
 $conexion->close();
-header("Location: ../dashboard.php");
-exit();
+    
+    // Preguntamos: "¿De qué página venía el usuario?" Si no sabemos, lo mandamos al dashboard por defecto.
+    $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
+    header("Location: " . $ruta_retorno);
+    exit();
 ?>

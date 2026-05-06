@@ -44,11 +44,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $conexion->close();
     
-    header("Location: ../dashboard.php");
+    // Preguntamos: "¿De qué página venía el usuario?" Si no sabemos, lo mandamos al dashboard por defecto.
+    $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
+    header("Location: " . $ruta_retorno);
     exit();
     
 } else {
-    header("Location: ../dashboard.php");
+    $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
+    header("Location: " . $ruta_retorno);
     exit();
 }
 ?>

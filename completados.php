@@ -38,7 +38,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
         SELECT t.*, l.nombre_lista 
         FROM tareas t 
         LEFT JOIN listas l ON t.lista_id = l.id_lista 
-        WHERE t.usuario_id = ? AND t.estado = 0 
+        WHERE t.usuario_id = ? AND t.estado = 1 
         ORDER BY t.created_at DESC
     ";
     
@@ -97,7 +97,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 
 
                 <li class="nav-item">
-                    <a class="nav-link active d-flex align-items-center gap-2 py-1" style="font-size: 0.9rem;" href="dashboard.php">
+                    <a class="nav-link d-flex align-items-center gap-2 py-1" style="font-size: 0.9rem;" href="dashboard.php">
                         <i class="bi bi-list-task fs-5 text-info"></i>
                         <span>Listas</span>
                     </a>
@@ -129,7 +129,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-3 py-1" style="font-size: 0.9rem;" href="completados.php">
+                    <a class="nav-link active d-flex align-items-center gap-3 py-1" style="font-size: 0.9rem;" href="completados.php">
                         <i class="bi bi-check2-circle fs-5 text-success "></i>
                         <span>Completados</span>
                     </a>
@@ -146,8 +146,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
             </a>
         </div>
 
-
-        <!-- contenido central -->
         <div class="flex-grow-1 p-5 overflow-auto ">
             
             <div class="card glass-card p-5" style="width: 100%; max-width: 1000px; text-align: left;">
@@ -155,120 +153,77 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                 <hr class="text-white opacity-25 mb-4">
 
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3>Mis Tareas</h3>
-                    <button id="btn-mostrar-tarea" class="btn btn-outline-light d-inline-flex align-items-center gap-2 mx-2" style="width: fit-content;">
-                        <i class="bi bi-plus-lg"></i> Añadir nueva tarea
+                    <h3>Completados</h3>
+                    <!-- Botón que dispara el modal de vaciar completadas -->
+                    <button type="button" class="btn btn-outline-light d-inline-flex align-items-center gap-2 mx-2" data-bs-toggle="modal" data-bs-target="#modalBorrarCompletadas" style="width: fit-content;">
+                        <i class="bi bi-trash"></i> Borrar tareas completadas
                     </button>
                 </div>
 
-                 <!-- === FORMULARIO OCULTO PARA AÑADIR TAREA === -->
-                <!-- d-none lo oculta por defecto. Le damos un fondo semi-transparente para que resalte --> 
-                <div id="formulario-tarea" class="d-none mt-3 p-3 rounded" style="background-color: rgba(0, 0, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.1);">
-                    <form action="acciones/crear_tarea.php" method="POST">
-                        
-                         <!-- Input para el nombre de la tarea --> 
-                        <input type="text" name="nombre_tarea" class="form-control bg-transparent text-white border-secondary mb-3 shadow-none" placeholder="Escribe el nombre de la tarea..." required>
-                        <textarea name="descripcion_tarea" class="form-control bg-transparent text-white border-secondary mb-3 shadow-none" placeholder="Descripción (opcional)..." rows="2" style="font-size: 0.9rem; resize: none;"></textarea>
-
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        
-                         <!-- Selector de Lista --> 
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-inbox text-white-50"></i>
-                            <!-- Agregamos la clase 'glass-form-element' -->
-                            <select name="lista_id" class="form-select form-select-sm glass-form-element shadow-none" style="width: auto; cursor: pointer;">
-                                
-                                <!-- Opción por defecto (Bandeja de entrada), su valor es 0 -->
-                                <option value="0">Añadir a Lista</option>
-                                
-                                <!-- Imprimimos las listas reales del usuario -->
-                                <?php foreach ($listas_usuario as $lista): ?>
-                                    <option value="<?php echo $lista['id_lista']; ?>">
-                                        <?php echo htmlspecialchars($lista['nombre_lista']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                                
-                            </select>
-                        </div>
-
-                         <!-- Botones de Cancelar y Añadir --> 
-                        <div class="d-flex gap-2">
-                             <!-- Agregamos 'glass-form-element' al botón cancelar --> 
-                            <button type="button" id="btn-cancelar-tarea" class="btn btn-sm glass-form-element">Cancelar</button>
-                            
-                            <!-- Agregamos 'glass-btn-primary' al botón de añadir --> 
-                            <button type="submit" class="btn btn-sm glass-btn-primary">Añadir tarea</button>
-                        </div>
-                        
-                    </div>
-                    </form>
-                </div>
-                 <!-- ============================================ --> 
-
-                <!-- === LISTA VERTICAL DE TAREAS === -->
+                <!-- === LISTA VERTICAL DE TAREAS COMPLETADAS === -->
                 <div class="mt-4 mb-5">
                     <?php if (!empty($tareas_usuario)): ?>
                         <div class="d-flex flex-column gap-3">
                             
                             <?php foreach ($tareas_usuario as $tarea): ?>
-                                <!-- Tarjeta horizontal para la tarea -->
+                                <!-- Le quitamos la opacidad al contenedor principal -->
                                 <div class="glass-form-element p-3 rounded d-flex justify-content-between align-items-start">
                                     
-                                    <!-- Lado Izquierdo: Checkbox, Título, Badge y Descripción -->
-                                    <div class="d-flex gap-3 flex-grow-1">
+                                    <!-- Y se la aplicamos SOLO al bloque izquierdo (el contenido de la tarea) -->
+                                    <div class="d-flex gap-3 flex-grow-1" style="opacity: 0.5;">
                                         
-                                        <!-- Checkbox interactivo -->
+                                        <!-- Checkbox ya marcado (Verde y relleno) -->
                                         <div class="mt-1">
-                                            <a href="acciones/completar_tarea.php?id=<?php echo $tarea['id_tarea']; ?>" class="text-decoration-none" title="Marcar como completada">
-                                                <i class="bi bi-circle text-white-50 fs-5" onmouseover="this.classList.remove('bi-circle'); this.classList.add('bi-check-circle', 'text-success');" onmouseout="this.classList.remove('bi-check-circle', 'text-success'); this.classList.add('bi-circle');" style="cursor: pointer; transition: all 0.2s;"></i>
+                                            <!-- Enlace para "Desmarcar" o restaurar la tarea -->
+                                            <a href="acciones/restaurar_tarea.php?id=<?php echo $tarea['id_tarea']; ?>" class="text-decoration-none" title="Desmarcar y volver a pendientes">
+                                                <i class="bi bi-check-circle-fill text-success fs-5" style="cursor: pointer;"></i>
                                             </a>
                                         </div>
                                         
                                         <div class="d-flex flex-column gap-1 w-100">
-                                            <!-- Fila del título y la píldora -->
                                             <div class="d-flex align-items-center flex-wrap gap-2">
-                                                <h5 class="text-white mb-0" style="font-weight: 500; font-size: 1.1rem;">
+                                                <!-- Título tachado (text-decoration-line-through) -->
+                                                <h5 class="text-white-50 mb-0 text-decoration-line-through" style="font-weight: 500; font-size: 1.1rem;">
                                                     <?php echo htmlspecialchars($tarea['titulo']); ?>
                                                 </h5>
                                                 
-                                                <!-- Badge de la lista -->
+                                                <!-- Badge de la lista (opcional, para saber de dónde venía) -->
                                                 <?php if (!empty($tarea['nombre_lista'])): ?>
-                                                    <span class="badge rounded-pill" style="background-color: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); font-weight: normal;">
-                                                        <i class="bi bi-folder2 text-white-50 me-1"></i> <?php echo htmlspecialchars($tarea['nombre_lista']); ?>
+                                                    <span class="badge rounded-pill" style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); font-weight: normal; color: rgba(255,255,255,0.5);">
+                                                        <i class="bi bi-folder2 me-1"></i> <?php echo htmlspecialchars($tarea['nombre_lista']); ?>
                                                     </span>
                                                 <?php else: ?>
-                                                    <span class="badge rounded-pill" style="background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); font-weight: normal; color: rgba(255,255,255,0.7);">
+                                                    <span class="badge rounded-pill" style="background-color: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); font-weight: normal; color: rgba(255,255,255,0.5);">
                                                         <i class="bi bi-inbox me-1"></i> Bandeja de entrada
                                                     </span>
                                                 <?php endif; ?>
                                             </div>
                                             
-                                            <!-- Descripción (si existe) -->
+                                            <!-- Descripción también tachada -->
                                             <?php if (!empty($tarea['descripcion'])): ?>
-                                                <!-- nl2br respeta los saltos de línea que el usuario hizo con Enter -->
-                                                <p class="text-white-50 mb-0 mt-1 small" style="line-height: 1.4;">
+                                                <p class="text-white-50 mb-0 mt-1 small text-decoration-line-through" style="line-height: 1.4;">
                                                     <?php echo nl2br(htmlspecialchars($tarea['descripcion'])); ?>
                                                 </p>
                                             <?php endif; ?>
                                         </div>
                                     </div>
                                     
-                                    <!-- Lado Derecho: Menú de 3 puntitos -->
+                                    <!-- Menú de 3 puntitos -->
                                     <div class="dropdown ms-2">
                                         <button class="btn btn-sm text-white-50 p-0 shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-three-dots fs-5"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg" style="background-color: rgba(30, 20, 35, 0.95); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
                                             <li>
-                                                <button class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalEditarTarea<?php echo $tarea['id_tarea']; ?>">
-                                                    <i class="bi bi-pencil-square text-info"></i> Editar tarea
-                                                </button>
+                                                <!-- Opción para restaurar (en vez de editar) -->
+                                                <a class="dropdown-item d-flex align-items-center gap-2" href="acciones/restaurar_tarea.php?id=<?php echo $tarea['id_tarea']; ?>">
+                                                    <i class="bi bi-arrow-counterclockwise text-info"></i> Restaurar 
+                                                </a>
                                             </li>
                                             <li><hr class="dropdown-divider border-secondary opacity-25"></li>
                                             <li>
                                                 <button class="dropdown-item d-flex align-items-center gap-2 text-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarTarea<?php echo $tarea['id_tarea']; ?>">
-                                                    <i class="bi bi-trash"></i> Eliminar tarea
+                                                    <i class="bi bi-trash"></i> Eliminar definitivamente
                                                 </button>
                                             </li>
                                         </ul>
@@ -279,169 +234,21 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                             
                         </div>
                     <?php else: ?>
-                        <!-- Estado Vacío -->
+                        <!-- Estado Vacío para Completados -->
                         <div class="p-4 rounded text-center text-white-50" style="background-color: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2);">
-                            <i class="bi bi-check2-square fs-2 mb-2 d-block"></i>
-                            Aún no tienes tareas pendientes. ¡Añade una nueva tarea para empezar!
-                        </div>
-                    <?php endif; ?>
-                </div>
-                <!-- ========================================== -->
-
-                <hr class="text-white opacity-25 mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3>Mis Listas</h3>
-                    <button id="btn-mostrar-lista" class="btn btn-outline-light d-inline-flex align-items-center gap-2 mx-2" style="width: fit-content;">
-                        <i class="bi bi-plus-lg"></i> Añadir nueva lista
-                    </button>
-                </div>
-
-                 <!-- === FORMULARIO OCULTO PARA AÑADIR LISTA === -->
-                <!-- d-none lo oculta por defecto. Le damos un fondo semi-transparente para que resalte --> 
-                <div id="formulario-lista" class="d-none mt-3 p-3 rounded" style="background-color: rgba(0, 0, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.1);">
-                    <form action="acciones/crear_lista.php" method="POST">                        
-                         <!-- Input para el nombre de la lista --> 
-                        <input type="text" name="nombre_lista" class="form-control bg-transparent text-white border-secondary mb-3 shadow-none" placeholder="Escribe el nombre de la lista..." required>                     
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                         <!-- Botones de Cancelar y Añadir --> 
-                        <div class="d-flex gap-2">              
-                            <button type="button" id="btn-cancelar-lista" class="btn btn-sm glass-form-element">Cancelar</button>
-                            <button type="submit" class="btn btn-sm glass-btn-primary">Añadir lista</button>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-                <!-- ============================================ --> 
-
-                <!-- === MOSTRAR LAS LISTAS EN FORMATO TARJETAS DE CRISTAL === -->
-                <div class="row mt-4">
-                    <?php if (!empty($listas_usuario)): ?>
-                        
-                <?php foreach ($listas_usuario as $lista): ?>
-                    <div class="col-md-4 col-sm-6 mb-3">
-                        
-                        <div class="glass-form-element d-flex justify-content-between align-items-center p-3 rounded w-100 h-100">
-                            
-                            <a href="dashboard.php?lista=<?php echo $lista['id_lista']; ?>" class="d-flex align-items-center text-decoration-none flex-grow-1 text-truncate" style="color: inherit;">
-                                <i class="bi bi-folder2-open text-white-50 fs-4 me-3"></i>
-                                <span class="text-white text-truncate" style="font-weight: 500;">
-                                    <?php echo htmlspecialchars($lista['nombre_lista']); ?>
-                                </span>
-                            </a>
-                            
-                            <div class="dropdown">
-                                <button class="btn btn-sm text-white-50 p-0 shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-three-dots-vertical fs-5"></i>
-                                </button>
-                                
-                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg" style="background-color: rgba(30, 20, 35, 0.95); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
-                                    <li>
-                                        <!-- CAMBIO AQUÍ: Ahora es un botón que dispara el Modal específico de esta lista -->
-                                        <button class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalEditarLista<?php echo $lista['id_lista']; ?>">
-                                            <i class="bi bi-pencil-square text-info"></i> Editar nombre
-                                        </button>
-                                    </li>
-                                    <li><hr class="dropdown-divider border-secondary opacity-25"></li>
-
-                                    <li>
-                                        <!-- Ahora es un botón que dispara el Modal de Eliminar -->
-                                        <button class="dropdown-item d-flex align-items-center gap-2 text-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarLista<?php echo $lista['id_lista']; ?>">
-                                            <i class="bi bi-trash"></i> Eliminar lista
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            
-                    <?php else: ?>
-                        <!-- Diseño de "Estado vacío" -->
-                        <div class="col-12">
-                            <div class="p-4 rounded text-center text-white-50" style="background-color: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2);">
-                                <i class="bi bi-inbox fs-2 mb-2 d-block"></i>
-                                Aún no tienes listas. ¡Crea una para empezar a organizar tus tareas!
-                            </div>
+                            <i class="bi bi-award fs-2 mb-2 d-block text-white-50"></i>
+                            Aún no has completado ninguna tarea. ¡Ve por ellas!
                         </div>
                     <?php endif; ?>
                 </div>
                 <!-- ========================================================== -->
-                <hr class="text-white opacity-25 mb-4">
             </div>
         </div>
-
     </div>
 </div>
 
                 <!-- ========================================================== -->
                 <!-- ZONA SEGURA DE MODALES (Fuera de los contenedores flex/overflow) -->
-                <?php if (!empty($listas_usuario)): ?>
-                    <?php foreach ($listas_usuario as $lista): ?>
-                        
-                        <!-- Modal para editar la lista ID: <?php echo $lista['id_lista']; ?> -->
-                        <div class="modal fade" id="modalEditarLista<?php echo $lista['id_lista']; ?>" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                
-                                <div class="modal-content shadow-lg" style="background-color: rgba(40, 25, 45, 0.95); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(15px);">
-                                    
-                                    <div class="modal-header border-bottom border-secondary border-opacity-25">
-                                        <h5 class="modal-title text-white" style="font-weight: 500;">Editar Lista</h5>
-                                        <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    
-                                    <form action="acciones/editar_lista.php" method="POST">
-                                        <div class="modal-body">
-                                            <input type="hidden" name="id_lista" value="<?php echo $lista['id_lista']; ?>">
-                                            
-                                            <label class="form-label text-white-50 small">Nombre de la lista</label>
-                                            <input type="text" name="nuevo_nombre" class="form-control bg-transparent text-white border-secondary shadow-none glass-form-element" value="<?php echo htmlspecialchars($lista['nombre_lista']); ?>" required>
-                                        </div>
-                                        
-                                        <div class="modal-footer border-top border-secondary border-opacity-25">
-                                            <button type="button" class="btn btn-sm glass-form-element" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="submit" class="btn btn-sm glass-btn-primary">Guardar cambios</button>
-                                        </div>
-                                    </form>
-                                    
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- === MODAL PARA ELIMINAR LISTA === -->
-                                <div class="modal fade" id="modalEliminarLista<?php echo $lista['id_lista']; ?>" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        
-                                        <div class="modal-content shadow-lg" style="background-color: rgba(45, 20, 25, 0.95); border: 1px solid rgba(220, 53, 69, 0.3); backdrop-filter: blur(15px);">
-                                            
-                                            <div class="modal-header border-bottom border-danger border-opacity-25">
-                                                <h5 class="modal-title text-danger" style="font-weight: 500;">
-                                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Eliminar Lista
-                                                </h5>
-                                                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            
-                                            <div class="modal-body">
-                                                <p class="text-white mb-2">¿Estás seguro de que deseas eliminar la lista <strong>"<?php echo htmlspecialchars($lista['nombre_lista']); ?>"</strong>?</p>
-                                                <p class="text-white-50 small mb-0">
-                                                    <i class="bi bi-info-circle me-1"></i>Las tareas dentro de esta lista no se borrarán, volverán a la Bandeja de entrada.
-                                                </p>
-                                            </div>
-                                            
-                                            <div class="modal-footer border-top border-danger border-opacity-25">
-                                                <button type="button" class="btn btn-sm glass-form-element" data-bs-dismiss="modal">Cancelar</button>
-                                                <!-- Este es el enlace real que ejecuta el borrado -->
-                                                <a href="acciones/borrar_lista.php?id=<?php echo $lista['id_lista']; ?>" class="btn btn-sm border-0 text-white" style="background-color: rgba(220, 53, 69, 0.8);">Sí, eliminar lista</a>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- ============================================== -->
-
-                                <!-- ========================================================== -->
                             <!-- MODALES PARA TAREAS -->
                             <?php if (!empty($tareas_usuario)): ?>
                                 <?php foreach ($tareas_usuario as $tarea): ?>
@@ -524,13 +331,37 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                             <!-- ========================================================== -->
 
 
+                            <!-- === MODAL PARA VACIAR TODAS LAS TAREAS COMPLETADAS === -->
+                            <div class="modal fade" id="modalBorrarCompletadas" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content shadow-lg" style="background-color: rgba(45, 20, 25, 0.95); border: 1px solid rgba(220, 53, 69, 0.3); backdrop-filter: blur(15px);">
+                                        
+                                        <div class="modal-header border-bottom border-danger border-opacity-25">
+                                            <h5 class="modal-title text-danger" style="font-weight: 500;">
+                                                <i class="bi bi-exclamation-triangle-fill me-2"></i>Vaciar Completadas
+                                            </h5>
+                                            <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        
+                                        <div class="modal-body">
+                                            <p class="text-white mb-0">¿Estás seguro de que deseas eliminar permanentemente <strong>todas</strong> las tareas completadas? Esta acción no se puede deshacer.</p>
+                                        </div>
+                                        
+                                        <div class="modal-footer border-top border-danger border-opacity-25">
+                                            <button type="button" class="btn btn-sm glass-form-element" data-bs-dismiss="modal">Cancelar</button>
+                                            <!-- Este enlace llama al archivo PHP que crearemos ahora -->
+                                            <a href="acciones/borrar_completados.php" class="btn btn-sm border-0 text-white" style="background-color: rgba(220, 53, 69, 0.8);">Sí, vaciar todo</a>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ========================================================== -->
 
-                    <?php endforeach; ?>
-                <?php endif; ?>
+
                 <!-- FIN DE ZONA DE MODALES -->
                 <!-- ========================================================== -->
 
 
 <script src="assets/js/mostrarFormularioTarea.js"></script>
-<script src="assets/js/mostrarFormularioLista.js"></script>
 <?php include 'includes/footer.php'; ?>
