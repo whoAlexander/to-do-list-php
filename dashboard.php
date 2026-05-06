@@ -324,7 +324,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                         
                         <div class="glass-form-element d-flex justify-content-between align-items-center p-3 rounded w-100 h-100">
                             
-                            <a href="dashboard.php?lista=<?php echo $lista['id_lista']; ?>" class="d-flex align-items-center text-decoration-none flex-grow-1 text-truncate" style="color: inherit;">
+                            <a href="lista.php?id=<?php echo $lista['id_lista']; ?>" class="d-flex align-items-center text-decoration-none flex-grow-1 text-truncate" style="color: inherit;">
                                 <i class="bi bi-folder2-open text-white-50 fs-4 me-3"></i>
                                 <span class="text-white text-truncate" style="font-weight: 500;">
                                     <?php echo htmlspecialchars($lista['nombre_lista']); ?>
