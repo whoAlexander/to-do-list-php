@@ -86,16 +86,34 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
 <?php include 'acciones/obtener_fecha.php'; ?>
 
 <style>
-    /* Esto obliga al body a no centrar, usar el 100% y dejar espacio para el nav */
     body, main {
         display: block !important; 
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-    }p
+    }
+    
+    /* Diseño normal para PC */
+    .responsive-sidebar {
+        width: 280px;
+        position: sticky;
+        top: 0;
+    }
+    
+    /* Diseño para Celulares (pantallas menores a 768px) */
+    @media (max-width: 768px) {
+        .responsive-sidebar {
+            width: 100% !important; 
+            height: auto !important; 
+            position: relative !important; 
+            border-right: none !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 2rem !important; 
+        }
+    }
 </style>
 <div class="container-fluid px-0 w-100">
-    <div class="d-flex" style="height: 100vh;"> 
+    <div class="d-block d-md-flex" style="min-height: 100vh;">
 
 
         <!-- barra lateral -->
@@ -106,7 +124,7 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
             // Si estamos en una lista, guardamos su ID para saber cuál pintar de 'active'
             $id_url_actual = isset($_GET['id']) ? intval($_GET['id']) : 0;
         ?>
-        <div class="glass-sidebar p-4 d-flex flex-column h-100" style="width: 280px;">
+        <div class="glass-sidebar p-4 d-flex flex-column responsive-sidebar">
             
             <a href="index.php" class="text-white text-decoration-none mb-4 mt-2">
                 <h3 style="font-family: 'Archivo Black', sans-serif; letter-spacing: 1px; text-align: center;">To Do List</h3>
@@ -183,27 +201,26 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
             </a>
         </div>
 
-<div class="flex-grow-1 p-5 overflow-auto">
-    <div class="card glass-card p-5" style="width: 100%; max-width: 1000px; text-align: left;">
+<div class="flex-grow-1 px-3 py-4 p-md-5 overflow-auto">
+    <div class="card glass-card p-3 p-md-5 mx-auto" style="width: 100%; max-width: 1000px; text-align: left;">
         
-        <!-- Título de la Lista y Botones -->
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-            <h2 class="text-white mb-0 d-flex align-items-center gap-3">
+        <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center mb-4 gap-3">
+            
+            <h2 class="text-white mb-0 d-flex align-items-center justify-content-center gap-3 text-center text-md-start">
                 <i class="bi bi-folder2-open text-white-50"></i>
                 <?php echo htmlspecialchars($lista_actual['nombre_lista']); ?>
             </h2>
             
-            <div class="d-flex gap-2 flex-wrap">
-                <!-- Botón: Añadir tareas existentes (Abre un modal) -->
+            <div class="d-flex gap-2 flex-wrap justify-content-center">
                 <button class="btn btn-outline-light d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalAñadirExistentes">
                     <i class="bi bi-box-arrow-in-down"></i> Añadir tareas existentes
                 </button>
                 
-                <!-- Botón: Nueva Tarea (El que despliega tu formulario oculto) -->
                 <button id="btn-mostrar-tarea" class="btn glass-btn-primary d-inline-flex align-items-center gap-2">
                     <i class="bi bi-plus-lg"></i> Nueva tarea
                 </button>
             </div>
+            
         </div>
         
         <hr class="text-white opacity-25 mb-4">
@@ -214,10 +231,10 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
                 <input type="text" name="nombre_tarea" class="form-control bg-transparent text-white border-secondary mb-3 shadow-none" placeholder="Escribe el nombre de la tarea..." required>
                 <textarea name="descripcion_tarea" class="form-control bg-transparent text-white border-secondary mb-3 shadow-none" placeholder="Descripción (opcional)..." rows="2" style="resize: none;"></textarea>
 
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-folder text-white-50"></i>
-                        <!-- Por defecto, la tarea se guarda en ESTA lista -->
                         <select name="lista_id" class="form-select form-select-sm glass-form-element shadow-none" style="width: auto; cursor: pointer;">
                             <option value="<?php echo $id_lista_actual; ?>" selected>
                                 <?php echo htmlspecialchars($lista_actual['nombre_lista']); ?>
@@ -225,10 +242,12 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
                             <option value="0">Bandeja de entrada</option>
                         </select>
                     </div>
-                    <div class="d-flex gap-2">
+                    
+                    <div class="d-flex gap-2 ms-auto">
                         <button type="button" id="btn-cancelar-tarea" class="btn btn-sm glass-form-element">Cancelar</button>
                         <button type="submit" class="btn btn-sm glass-btn-primary">Añadir tarea</button>
                     </div>
+                    
                 </div>
             </form>
         </div>

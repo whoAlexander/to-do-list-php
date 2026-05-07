@@ -1,9 +1,15 @@
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav-simple.php'; ?>
-
-<div class="card glass-card p-4" style="width: 450px; margin: auto;"> 
+<style>
+    body {
+        display: block !important; 
+    }
+</style>
+<div class="d-flex justify-content-center align-items-center px-3 w-100" style="min-height: 80vh;">
     
-    <h2 class="text-center mt-4 mb-4" style="font-family: 'Archivo Black', sans-serif; font-size: 2rem;">Iniciar Sesion</h2>
+    <div class="card glass-card p-4 w-100" style="max-width: 450px;">
+        
+        <h2 class="text-center mt-4 mb-4" style="font-family: 'Archivo Black', sans-serif; font-size: 2rem;">Iniciar Sesion</h2>
 
     <?php if (isset($_GET['mensaje'])): ?>
     
@@ -30,13 +36,13 @@
             <label class="form-label text-white">Contraseña</label>
             <input type="password" name="password" class="form-control" required>
         </div>
-        <button type="submit" class="button-start w-50 mt-5 d-block mx-auto">Inicia Sesion</button>
+        <button type="submit" class="button-start mt-4 mb-2 d-block mx-auto px-4 text-nowrap" style="min-width: 200px;">Inicia Sesion</button>
     </form>
     
-    <p class="mt-3 text-white text-center">
+    <p class="mt-3 text-white text-center mx-2">
         ¿No tienes una cuenta? <a href="register.php" class="link-login">Registrarse</a>
     </p>
-
+    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>

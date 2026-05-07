@@ -65,15 +65,34 @@ if (!empty($busqueda)) {
         margin: 0 !important;
         padding: 0 !important;
     }
+    
+    /* Diseño normal para PC */
+    .responsive-sidebar {
+        width: 280px;
+        position: sticky;
+        top: 0;
+    }
+    
+    /* Diseño para Celulares (pantallas menores a 768px) */
+    @media (max-width: 768px) {
+        .responsive-sidebar {
+            width: 100% !important; 
+            height: auto !important; 
+            position: relative !important; 
+            border-right: none !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 2rem !important; 
+        }
+    }
 </style>
 
 <div class="container-fluid px-0 w-100">
-    <div class="d-flex" style="height: 100vh;"> 
+    <div class="d-block d-md-flex" style="min-height: 100vh;">
 
         <!-- Pega aquí tu barra lateral HTML tal cual la tienes en los otros archivos -->
         <!-- (Si hiciste el includes/sidebar.php, solo pon el include aquí) -->
 
-                <div class="glass-sidebar p-4 d-flex flex-column h-100" style="width: 280px;">
+        <div class="glass-sidebar p-4 d-flex flex-column responsive-sidebar">
             
             <a href="index.php" class="text-white text-decoration-none mb-4 mt-2">
                 <h3 style="font-family: 'Archivo Black', sans-serif; letter-spacing: 1px; text-align: center;">To Do List</h3>
@@ -148,8 +167,8 @@ if (!empty($busqueda)) {
         </div>
 
         <!-- CONTENIDO PRINCIPAL -->
-        <div class="flex-grow-1 p-5 overflow-auto">
-            <div class="card glass-card p-5 mx-auto" style="width: 100%; max-width: 800px; text-align: left;">
+        <div class="flex-grow-1 px-3 py-4 p-md-5 overflow-auto">
+            <div class="card glass-card p-3 p-md-5 mx-auto" style="width: 100%; max-width: 1000px; text-align: left;">
                 
                 <h2 class="text-white mb-4 d-flex align-items-center gap-3">
                     <i class="bi bi-search text-white-50"></i> Buscador

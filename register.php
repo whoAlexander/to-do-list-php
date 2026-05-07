@@ -1,9 +1,14 @@
 <?php require 'config/conexion.php'; ?>
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav-simple.php'; ?>
- 
-<div class="card glass-card p-4" style="width: 450px; margin: auto;"> 
+ <style>
+    body {
+        display: block !important; 
+    }
+</style>
+<div class="d-flex justify-content-center align-items-center px-3 w-100" style="min-height: 80vh;">
     
+    <div class="card glass-card p-4 w-100" style="max-width: 450px;">
     <h2 class="text-center mt-4 mb-4" style="font-family: 'Archivo Black', sans-serif; font-size: 2rem;">Crear Cuenta</h2>
 
     <?php if (isset($_GET['mensaje'])): ?>
@@ -42,7 +47,7 @@
     <p class="mt-3 text-white text-center">
         ¿Ya tienes cuenta? <a href="login.php" class="link-login">Inicia Sesión</a>
     </p>
-
+    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
