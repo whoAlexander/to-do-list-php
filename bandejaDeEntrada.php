@@ -1,15 +1,11 @@
 <?php
-// === 1. EL PATOVICA (Protección de la página) ===
-// DEBE ser lo primero en el archivo, antes de cualquier HTML
+//(Protección de la página)
 session_start();
 
-// Si NO existe la variable de sesión (el usuario no se logueó)...
 if (!isset($_SESSION['usuario_id'])) {
-    // Lo mandamos de vuelta al login
     header("Location: login.php");
-    exit(); // Detenemos el código para que no se siga leyendo hacia abajo
+    exit();
 }
-// ================================================
 
 // 1. Conectamos a la base de datos
 require 'config/conexion.php'; 
@@ -24,7 +20,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     $stmt_listas->execute();
     $resultado = $stmt_listas->get_result();
     
-    // 3. Guardamos cada lista en nuestro arreglo
+// 3. Guardamos cada lista en nuestro arreglo
     while ($fila = $resultado->fetch_assoc()) {
         $listas_usuario[] = $fila;
     }
@@ -54,7 +50,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     }
 
 ?>
-
 <?php include 'includes/header.php'; ?>
 <?php include 'acciones/obtener_fecha.php'; ?>
 
@@ -87,8 +82,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 </style>
 <div class="container-fluid px-0 w-100">
     <div class="d-block d-md-flex" style="min-height: 100vh;">
-
-
         <!-- barra lateral -->
         <div class="glass-sidebar p-4 d-flex flex-column responsive-sidebar">
             
@@ -113,7 +106,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                     </a>
                 </li>
 
-
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2 py-1" style="font-size: 0.9rem;" href="dashboard.php">
                         <i class="bi bi-list-task fs-5 text-info"></i>
@@ -137,12 +129,9 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                         <?php else: ?>
                             <!-- Si no tiene listas, mostramos un mensajito -->
                             <li class="nav-item text-white-50 ms-3" style="font-size: 0.8rem;">No hay listas aún.</li>
-                        <?php endif; ?>
-
-                            
+                        <?php endif; ?>         
                         </ul>
                         <!-- === FIN DEL SUBMENÚ === -->
-
 
                 </li>
                 
@@ -178,7 +167,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                 </div>
 
                  <!-- === FORMULARIO OCULTO PARA AÑADIR TAREA === -->
-                <!-- d-none lo oculta por defecto. Le damos un fondo semi-transparente para que resalte --> 
                 <div id="formulario-tarea" class="d-none mt-3 p-3 rounded" style="background-color: rgba(0, 0, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.1);">
                     <form action="acciones/crear_tarea.php" method="POST">
                         
@@ -219,16 +207,10 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                         <div class="d-flex flex-column gap-3">
                             
                             <?php foreach ($tareas_usuario as $tarea): ?>
-                                <!-- Tarjeta horizontal para la tarea -->
                                 <div class="glass-form-element p-3 rounded d-flex justify-content-between align-items-start">
-                                    
-                                    <!-- Lado Izquierdo: Checkbox, Título, Badge y Descripción -->
                                     <div class="d-flex gap-3 flex-grow-1">
-                                        
-                                    <!-- Checkbox interactivo -->
                                     <div class="mt-1">
                                         <a href="acciones/completar_tarea.php?id=<?php echo $tarea['id_tarea']; ?>" class="text-decoration-none" title="Marcar como completada">
-                                            <!-- Le añadimos una clase de hover en el estilo en línea (o puedes agregarla en tu CSS) para que se ponga verde al pasar el mouse -->
                                             <i class="bi bi-circle text-white-50 fs-5" onmouseover="this.classList.remove('bi-circle'); this.classList.add('bi-check-circle', 'text-success');" onmouseout="this.classList.remove('bi-check-circle', 'text-success'); this.classList.add('bi-circle');" style="cursor: pointer; transition: all 0.2s;"></i>
                                         </a>
                                     </div>
@@ -252,7 +234,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                                                 <?php endif; ?>
                                             </div>
                                             
-                                            <!-- Descripción (si existe) -->
+                                            <!-- Descripción -->
                                             <?php if (!empty($tarea['descripcion'])): ?>
                                                 <!-- nl2br respeta los saltos de línea que el usuario hizo con Enter -->
                                                 <p class="text-white-50 mb-0 mt-1 small" style="line-height: 1.4;">
@@ -299,8 +281,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
         </div>
     </div>
 </div>
-
-                <!-- ========================================================== -->
                 <!-- ZONA SEGURA DE MODALES (Fuera de los contenedores flex/overflow) -->
                             <!-- MODALES PARA TAREAS -->
                             <?php if (!empty($tareas_usuario)): ?>
@@ -381,10 +361,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                                 <?php endforeach; ?>
                             <?php endif; ?>
                             <!-- FIN DE MODALES PARA TAREAS -->
-                            <!-- ========================================================== -->
                 <!-- FIN DE ZONA DE MODALES -->
-                <!-- ========================================================== -->
-
-
 <script src="assets/js/mostrarFormularioTarea.js"></script>
 <?php include 'includes/footer.php'; ?>

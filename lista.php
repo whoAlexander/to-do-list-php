@@ -74,17 +74,9 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
     $stmt_in->close();
 }
 }
-
-// (Opcional) Aquí haríamos una consulta extra para buscar las tareas de la Bandeja de Entrada 
-// y poder mostrarlas en el modal de "Añadir tareas existentes".
 ?>
-
-<!-- Aquí empieza tu HTML, los <head>, el menú lateral, etc. -->
-
-
 <?php include 'includes/header.php'; ?>
 <?php include 'acciones/obtener_fecha.php'; ?>
-
 <style>
     body, main {
         display: block !important; 
@@ -114,10 +106,7 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
 </style>
 <div class="container-fluid px-0 w-100">
     <div class="d-block d-md-flex" style="min-height: 100vh;">
-
-
         <!-- barra lateral -->
-
         <?php
             // Detectamos el nombre del archivo en el que estamos parados
             $pagina_actual = basename($_SERVER['PHP_SELF']);
@@ -174,13 +163,9 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
                         <?php else: ?>
                             <!-- Si no tiene listas, mostramos un mensajito -->
                             <li class="nav-item text-white-50 ms-3" style="font-size: 0.8rem;">No hay listas aún.</li>
-                        <?php endif; ?>
-
-                            
+                        <?php endif; ?>     
                         </ul>
-                        <!-- === FIN DEL SUBMENÚ === -->
-
-
+                    <!-- === FIN DEL SUBMENÚ === -->
                 </li>
                 
                 <li class="nav-item">
@@ -190,17 +175,14 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
                     </a>
                 </li>
 
-
             </ul>
-
             <hr class="text-white opacity-25">
-
             <a href="acciones/logout.php" class="nav-link d-flex align-items-center gap-3 text-danger">
                 <i class="bi bi-box-arrow-right fs-5"></i>
                 <span>Cerrar Sesión</span>
             </a>
         </div>
-
+<!-- CONTENIDO PRINCIPAL -->
 <div class="flex-grow-1 px-3 py-4 p-md-5 overflow-auto">
     <div class="card glass-card p-3 p-md-5 mx-auto" style="width: 100%; max-width: 1000px; text-align: left;">
         
@@ -253,7 +235,6 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
         </div>
         <!-- ============================================ --> 
 
-        <!-- Pega justo aquí tu bucle HTML de LISTA VERTICAL DE TAREAS que ya tienes, funciona sin modificarle nada -->
         <!-- === LISTA VERTICAL DE TAREAS === -->
             <div class="mt-4 mb-5">
                 <?php if (!empty($tareas_usuario)): ?>
@@ -312,12 +293,9 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
 
     </div>
 </div>
-
-<!-- En tu Zona Segura de Modales al final del archivo, pon tus modales de Editar, Eliminar y Completar -->
     </div>
 </div>
 
-                <!-- ========================================================== -->
                 <!-- ZONA SEGURA DE MODALES (Fuera de los contenedores flex/overflow) -->
                             <!-- MODALES PARA TAREAS -->
                             <?php if (!empty($tareas_usuario)): ?>
@@ -398,7 +376,6 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
                                 <?php endforeach; ?>
                             <?php endif; ?>
                             <!-- FIN DE MODALES PARA TAREAS -->
-                            <!-- ========================================================== -->
 
                             <!-- === MODAL AÑADIR TAREAS EXISTENTES === -->
                             <div class="modal fade" id="modalAñadirExistentes" tabindex="-1" aria-hidden="true">
@@ -446,13 +423,8 @@ if ($stmt_in = $conexion->prepare($sql_inbox)) {
                                     </div>
                                 </div>
                             </div>
-                            <!-- ============================================== -->
-
-
 
                 <!-- FIN DE ZONA DE MODALES -->
-                <!-- ========================================================== -->
-
 
 <script src="assets/js/mostrarFormularioTarea.js"></script>
 <?php include 'includes/footer.php'; ?>

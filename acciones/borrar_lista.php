@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// 1. Validamos que el usuario esté logueado
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login.php");
     exit();
@@ -12,16 +11,10 @@ require '../config/conexion.php';
 // 2. Verificamos que hayamos recibido un ID por la URL (ej: borrar_lista.php?id=3)
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     
-    // Convertimos a número entero por seguridad (evita Inyección SQL)
+    // Convertimos a número entero por seguridad
     $id_lista = intval($_GET['id']); 
     $usuario_id = $_SESSION['usuario_id'];
 
-    /* 
-     * 3. PREGUNTA IMPORTANTE SOBRE TUS TAREAS:
-     * ¿Qué pasa con las tareas que estaban dentro de esta lista que vamos a borrar?
-     * Lo más común (y seguro) es convertirlas en tareas "Huérfanas" (enviarlas a la Bandeja de entrada).
-     * Para eso, primero actualizamos esas tareas y les ponemos lista_id = NULL.
-     */
     $sql_actualizar_tareas = "UPDATE tareas SET lista_id = NULL WHERE lista_id = ? AND usuario_id = ?";
     if ($stmt_tareas = $conexion->prepare($sql_actualizar_tareas)) {
         $stmt_tareas->bind_param("ii", $id_lista, $usuario_id);
@@ -29,11 +22,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         $stmt_tareas->close();
     }
 
-    /*
-     * 4. AHORA SÍ, BORRAMOS LA LISTA
-     * Validamos con usuario_id para asegurarnos de que el usuario no pueda borrar 
-     * una lista de otra persona adivinando el ID en la URL.
-     */
     $sql_borrar_lista = "DELETE FROM listas WHERE id_lista = ? AND usuario_id = ?";
     
     if ($stmt = $conexion->prepare($sql_borrar_lista)) {
@@ -61,7 +49,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 $conexion->close();
 
-// 5. Redirección final
 header("Location: ../dashboard.php");
 exit();
 ?>

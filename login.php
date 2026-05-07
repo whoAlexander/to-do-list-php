@@ -1,5 +1,13 @@
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav-simple.php'; ?>
+<?php
+session_start();
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+?>
+
 <style>
     body {
         display: block !important; 

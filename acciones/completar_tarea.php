@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// 1. Validamos sesión
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login.php");
     exit();
@@ -14,7 +13,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id_tarea = intval($_GET['id']);
     $usuario_id = $_SESSION['usuario_id'];
 
-    // 2. Preparamos el UPDATE: Cambiamos estado a 1 (completada)
     $sql = "UPDATE tareas SET estado = 1 WHERE id_tarea = ? AND usuario_id = ?";
     
     if ($stmt = $conexion->prepare($sql)) {
@@ -33,7 +31,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 $conexion->close();
 
-// 3. Magia de redirección dinámica para volver de donde vinimos
 $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
 header("Location: " . $ruta_retorno);
 exit();

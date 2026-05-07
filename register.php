@@ -1,6 +1,13 @@
 <?php require 'config/conexion.php'; ?>
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav-simple.php'; ?>
+<?php
+session_start();
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+?>
  <style>
     body {
         display: block !important; 
@@ -41,7 +48,7 @@
             <label class="form-label text-white">Contraseña</label>
             <input type="password" name="password" class="form-control" required placeholder="******">
         </div>
-        <button type="submit" class="button-start w-50 mt-5 d-block mx-auto">Registrarse</button>
+        <button type="submit" class="button-start mt-5 d-block mx-auto px-4 text-nowrap" style="min-width: 200px;">Registrarse</button>
     </form>
     
     <p class="mt-3 text-white text-center">

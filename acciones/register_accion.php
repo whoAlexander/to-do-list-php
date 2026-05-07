@@ -1,9 +1,13 @@
 <?php
-// 1. Incluimos la conexión a la base de datos
-// Usamos "../" para salir de la carpeta 'acciones' y buscar 'config'
+
+session_start();
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
 require_once '../config/conexion.php'; 
 
-// 2. Verificamos que los datos vengan del método POST (del botón enviar)
+// Verificamos que los datos vengan del método POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $username = $_POST['username'];
@@ -30,9 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit();
             }
         }
-        // si se loguea desde login mandar a home.php
-
-
 
         $stmt->close();
     }

@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// 1. Validamos sesión
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login.php");
     exit();
@@ -11,7 +10,7 @@ require '../config/conexion.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // 2. Recibimos todos los datos del formulario (Modal)
+    // Recibimos todos los datos del formulario (Modal)
     $id_tarea = intval($_POST['id_tarea']);
     $titulo = trim($_POST['titulo']);
     $descripcion = trim($_POST['descripcion']);
@@ -19,13 +18,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $usuario_id = $_SESSION['usuario_id'];
 
-    // 3. Convertimos el "0" de la Bandeja de entrada en un valor NULL para MySQL
+    // Convertimos el "0" de la Bandeja de entrada en un valor NULL para MySQL
     $lista_id_final = ($lista_id_recibida == 0) ? null : intval($lista_id_recibida);
 
-    // 4. Validamos que el título no esté vacío
+    // Validamos que el título no esté vacío
     if (!empty($titulo) && $id_tarea > 0) {
         
-        // 5. Preparamos el UPDATE en la tabla tareas
         $sql = "UPDATE tareas SET titulo = ?, descripcion = ?, lista_id = ? WHERE id_tarea = ? AND usuario_id = ?";
         
         if ($stmt = $conexion->prepare($sql)) {
@@ -46,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 $conexion->close();
     
-    // Preguntamos: "¿De qué página venía el usuario?" Si no sabemos, lo mandamos al dashboard por defecto.
     $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
     header("Location: " . $ruta_retorno);
     exit();

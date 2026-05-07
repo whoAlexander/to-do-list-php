@@ -1,4 +1,5 @@
 <?php
+//(Protección de la página)
 session_start();
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -55,9 +56,7 @@ if (!empty($busqueda)) {
     }
 }
 ?>
-
 <?php include 'includes/header.php'; ?>
-
 <style>
     body, main {
         display: block !important; 
@@ -88,10 +87,7 @@ if (!empty($busqueda)) {
 
 <div class="container-fluid px-0 w-100">
     <div class="d-block d-md-flex" style="min-height: 100vh;">
-
-        <!-- Pega aquí tu barra lateral HTML tal cual la tienes en los otros archivos -->
-        <!-- (Si hiciste el includes/sidebar.php, solo pon el include aquí) -->
-
+        <!-- barra lateral -->
         <div class="glass-sidebar p-4 d-flex flex-column responsive-sidebar">
             
             <a href="index.php" class="text-white text-decoration-none mb-4 mt-2">
@@ -115,35 +111,30 @@ if (!empty($busqueda)) {
                     </a>
                 </li>
 
-
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2 py-1" style="font-size: 0.9rem;" href="dashboard.php">
                         <i class="bi bi-list-task fs-5 text-info"></i>
                         <span>Listas</span>
                     </a>
                     <!-- === INICIO DEL SUBMENÚ DE LISTAS === -->
-                        <!-- ms-4 lo empuja a la derecha. mt-1 le da un mini espacio arriba -->
                         <ul class="nav flex-column ms-4 mt-1 gap-1">
-                            
-                    <?php if (!empty($listas_usuario)): ?>
-                            <!-- Si el usuario tiene listas, las dibujamos una por una -->
-                            <?php foreach ($listas_usuario as $lista): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link d-flex align-items-center gap-2 py-1 text-white-50" style="font-size: 0.9rem;" href="lista.php?id=<?php echo $lista['id_lista']; ?>">
-                                        <i class="bi bi-dot"></i>
-                                        <!-- Usamos htmlspecialchars por seguridad, para evitar inyección de código si alguien nombra una lista con etiquetas HTML -->
-                                        <span><?php echo htmlspecialchars($lista['nombre_lista']); ?></span>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <!-- Si no tiene listas, mostramos un mensajito -->
-                            <li class="nav-item text-white-50 ms-3" style="font-size: 0.8rem;">No hay listas aún.</li>
-                        <?php endif; ?>
-
-                            
+                        <?php if (!empty($listas_usuario)): ?>
+                                <!-- Si el usuario tiene listas, las dibujamos una por una -->
+                                <?php foreach ($listas_usuario as $lista): ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center gap-2 py-1 text-white-50" style="font-size: 0.9rem;" href="lista.php?id=<?php echo $lista['id_lista']; ?>">
+                                            <i class="bi bi-dot"></i>
+                                            <!-- Usamos htmlspecialchars por seguridad, para evitar inyección de código si alguien nombra una lista con etiquetas HTML -->
+                                            <span><?php echo htmlspecialchars($lista['nombre_lista']); ?></span>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <!-- Si no tiene listas, mostramos un mensajito -->
+                                <li class="nav-item text-white-50 ms-3" style="font-size: 0.8rem;">No hay listas aún.</li>
+                            <?php endif; ?>
                         </ul>
-                        <!-- === FIN DEL SUBMENÚ === -->
+                     <!-- === FIN DEL SUBMENÚ === -->
 
 
                 </li>
@@ -154,12 +145,8 @@ if (!empty($busqueda)) {
                         <span>Completados</span>
                     </a>
                 </li>
-
-
             </ul>
-
             <hr class="text-white opacity-25">
-
             <a href="acciones/logout.php" class="nav-link d-flex align-items-center gap-3 text-danger">
                 <i class="bi bi-box-arrow-right fs-5"></i>
                 <span>Cerrar Sesión</span>

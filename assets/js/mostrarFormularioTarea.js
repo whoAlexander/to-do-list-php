@@ -3,7 +3,6 @@
     const formulario = document.getElementById('formulario-tarea');
     const inputTarea = formulario.querySelector('input[name="nombre_tarea"]');
     const inputDescripcion = formulario.querySelector('textarea[name="descripcion_tarea"]');
-
     
     btnMostrar.addEventListener('click', function() {
         formulario.classList.remove('d-none'); // Quitamos la clase que lo oculta

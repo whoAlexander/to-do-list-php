@@ -1,21 +1,15 @@
 <?php
-// === 1. EL PATOVICA (Protección de la página) ===
-// DEBE ser lo primero en el archivo, antes de cualquier HTML
+// Protección de la página)
 session_start();
 
-// Si NO existe la variable de sesión (el usuario no se logueó)...
 if (!isset($_SESSION['usuario_id'])) {
-    // Lo mandamos de vuelta al login
     header("Location: login.php");
-    exit(); // Detenemos el código para que no se siga leyendo hacia abajo
+    exit();
 }
-// ================================================
 
-// 1. Conectamos a la base de datos
 require 'config/conexion.php'; 
-
-// 2. Buscamos las listas del usuario logueado
 $usuario_id = $_SESSION['usuario_id'];
+
 $listas_usuario = []; // Creamos un arreglo vacío para guardar las listas
 
 $sql_listas = "SELECT id_lista, nombre_lista FROM listas WHERE usuario_id = ? ORDER BY created_at ASC";
@@ -24,7 +18,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     $stmt_listas->execute();
     $resultado = $stmt_listas->get_result();
     
-    // 3. Guardamos cada lista en nuestro arreglo
+    // Guardamos cada lista en nuestro arreglo
     while ($fila = $resultado->fetch_assoc()) {
         $listas_usuario[] = $fila;
     }
@@ -32,7 +26,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 }
 // NO cerramos $conexion->close() todavía porque la usaremos para las tareas más adelante
 
-// 4. Buscamos las tareas pendientes del usuario
+// Buscamos las tareas pendientes del usuario
     $tareas_usuario = [];
     $sql_tareas = "
         SELECT t.*, l.nombre_lista 
@@ -54,7 +48,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     }
 
 ?>
-
 <?php include 'includes/header.php'; ?>
 <?php include 'acciones/obtener_fecha.php'; ?>
 
@@ -99,8 +92,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 </style>
 <div class="container-fluid px-0 w-100">
     <div class="d-block d-md-flex" style="min-height: 100vh;">
-
-
         <!-- barra lateral -->
         <div class="glass-sidebar p-4 d-flex flex-column responsive-sidebar">
             
@@ -124,7 +115,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                         <span>Bandeja de entrada</span>
                     </a>
                 </li>
-
 
                 <li class="nav-item">
                     <a class="nav-link active d-flex align-items-center gap-2 py-1" style="font-size: 0.9rem;" href="dashboard.php">
@@ -153,9 +143,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 
                             
                         </ul>
-                        <!-- === FIN DEL SUBMENÚ === -->
-
-
+                    <!-- === FIN DEL SUBMENÚ === -->
                 </li>
                 
                 <li class="nav-item">
@@ -164,18 +152,13 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                         <span>Completados</span>
                     </a>
                 </li>
-
-
             </ul>
-
             <hr class="text-white opacity-25">
-
             <a href="acciones/logout.php" class="nav-link d-flex align-items-center gap-3 text-danger">
                 <i class="bi bi-box-arrow-right fs-5"></i>
                 <span>Cerrar Sesión</span>
             </a>
         </div>
-
 
         <!-- contenido central -->
         <div class="flex-grow-1 p-2 p-md-5 overflow-auto ">
@@ -190,8 +173,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                     </button>
                 </div>
 
-                 <!-- === FORMULARIO OCULTO PARA AÑADIR TAREA === -->
-                <!-- d-none lo oculta por defecto. Le damos un fondo semi-transparente para que resalte --> 
+                <!-- === FORMULARIO OCULTO PARA AÑADIR TAREA === -->
                 <div id="formulario-tarea" class="d-none mt-3 p-3 rounded" style="background-color: rgba(0, 0, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.1);">
                     <form action="acciones/crear_tarea.php" method="POST">
                         
@@ -225,7 +207,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                 </div>
                     </form>
                 </div>
-                 <!-- ============================================ --> 
+                <!-- ============================================ --> 
 
                 <!-- === LISTA VERTICAL DE TAREAS === -->
                 <div class="mt-4 mb-5">
@@ -313,8 +295,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                     </button>
                 </div>
 
-                 <!-- === FORMULARIO OCULTO PARA AÑADIR LISTA === -->
-                <!-- d-none lo oculta por defecto. Le damos un fondo semi-transparente para que resalte --> 
+                <!-- === FORMULARIO OCULTO PARA AÑADIR LISTA === -->
                 <div id="formulario-lista" class="d-none mt-3 p-3 rounded" style="background-color: rgba(0, 0, 0, 0.15); border: 1px solid rgba(255, 255, 255, 0.1);">
                     <form action="acciones/crear_lista.php" method="POST">                        
                          <!-- Input para el nombre de la lista --> 
@@ -392,7 +373,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     </div>
 </div>
 
-                <!-- ========================================================== -->
                 <!-- ZONA SEGURA DE MODALES (Fuera de los contenedores flex/overflow) -->
                 <?php if (!empty($listas_usuario)): ?>
                     <?php foreach ($listas_usuario as $lista): ?>
@@ -456,9 +436,8 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                                         </div>
                                     </div>
                                 </div>
-                                <!-- ============================================== -->
+                        <!-- ============================================== -->
 
-                                <!-- ========================================================== -->
                             <!-- MODALES PARA TAREAS -->
                             <?php if (!empty($tareas_usuario)): ?>
                                 <?php foreach ($tareas_usuario as $tarea): ?>
@@ -538,15 +517,10 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                                 <?php endforeach; ?>
                             <?php endif; ?>
                             <!-- FIN DE MODALES PARA TAREAS -->
-                            <!-- ========================================================== -->
-
-
 
                     <?php endforeach; ?>
                 <?php endif; ?>
                 <!-- FIN DE ZONA DE MODALES -->
-                <!-- ========================================================== -->
-
 
 <script src="assets/js/mostrarFormularioTarea.js"></script>
 <script src="assets/js/mostrarFormularioLista.js"></script>

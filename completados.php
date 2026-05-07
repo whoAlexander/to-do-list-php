@@ -1,21 +1,15 @@
 <?php
-// === 1. EL PATOVICA (Protección de la página) ===
-// DEBE ser lo primero en el archivo, antes de cualquier HTML
+// Protección de la página
 session_start();
 
-// Si NO existe la variable de sesión (el usuario no se logueó)...
 if (!isset($_SESSION['usuario_id'])) {
-    // Lo mandamos de vuelta al login
     header("Location: login.php");
-    exit(); // Detenemos el código para que no se siga leyendo hacia abajo
+    exit();
 }
-// ================================================
 
-// 1. Conectamos a la base de datos
 require 'config/conexion.php'; 
-
-// 2. Buscamos las listas del usuario logueado
 $usuario_id = $_SESSION['usuario_id'];
+
 $listas_usuario = []; // Creamos un arreglo vacío para guardar las listas
 
 $sql_listas = "SELECT id_lista, nombre_lista FROM listas WHERE usuario_id = ? ORDER BY created_at ASC";
@@ -24,7 +18,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     $stmt_listas->execute();
     $resultado = $stmt_listas->get_result();
     
-    // 3. Guardamos cada lista en nuestro arreglo
+    // Guardamos cada lista en nuestro arreglo
     while ($fila = $resultado->fetch_assoc()) {
         $listas_usuario[] = $fila;
     }
@@ -32,7 +26,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 }
 // NO cerramos $conexion->close() todavía porque la usaremos para las tareas más adelante
 
-// 4. Buscamos las tareas pendientes del usuario
+// Buscamos las tareas pendientes del usuario
     $tareas_usuario = [];
     $sql_tareas = "
         SELECT t.*, l.nombre_lista 
@@ -54,10 +48,8 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     }
 
 ?>
-
 <?php include 'includes/header.php'; ?>
 <?php include 'acciones/obtener_fecha.php'; ?>
-
 <style>
     body, main {
         display: block !important; 
@@ -87,8 +79,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 </style>
 <div class="container-fluid px-0 w-100">
     <div class="d-block d-md-flex" style="min-height: 100vh;"> 
-
-
         <!-- barra lateral -->
         <div class="glass-sidebar p-4 d-flex flex-column responsive-sidebar">
             
@@ -113,7 +103,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                     </a>
                 </li>
 
-
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2 py-1" style="font-size: 0.9rem;" href="dashboard.php">
                         <i class="bi bi-list-task fs-5 text-info"></i>
@@ -123,27 +112,24 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                         <!-- ms-4 lo empuja a la derecha. mt-1 le da un mini espacio arriba -->
                         <ul class="nav flex-column ms-4 mt-1 gap-1">
                             
-                    <?php if (!empty($listas_usuario)): ?>
-                            <!-- Si el usuario tiene listas, las dibujamos una por una -->
-                            <?php foreach ($listas_usuario as $lista): ?>
-                                <li class="nav-item">
-                                    <a class="nav-link d-flex align-items-center gap-2 py-1 text-white-50" style="font-size: 0.9rem;" href="lista.php?id=<?php echo $lista['id_lista']; ?>">
-                                        <i class="bi bi-dot"></i>
-                                        <!-- Usamos htmlspecialchars por seguridad, para evitar inyección de código si alguien nombra una lista con etiquetas HTML -->
-                                        <span><?php echo htmlspecialchars($lista['nombre_lista']); ?></span>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <!-- Si no tiene listas, mostramos un mensajito -->
-                            <li class="nav-item text-white-50 ms-3" style="font-size: 0.8rem;">No hay listas aún.</li>
-                        <?php endif; ?>
+                        <?php if (!empty($listas_usuario)): ?>
+                                <!-- Si el usuario tiene listas, las dibujamos una por una -->
+                                <?php foreach ($listas_usuario as $lista): ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center gap-2 py-1 text-white-50" style="font-size: 0.9rem;" href="lista.php?id=<?php echo $lista['id_lista']; ?>">
+                                            <i class="bi bi-dot"></i>
+                                            <!-- Usamos htmlspecialchars por seguridad, para evitar inyección de código si alguien nombra una lista con etiquetas HTML -->
+                                            <span><?php echo htmlspecialchars($lista['nombre_lista']); ?></span>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <!-- Si no tiene listas, mostramos un mensajito -->
+                                <li class="nav-item text-white-50 ms-3" style="font-size: 0.8rem;">No hay listas aún.</li>
+                            <?php endif; ?>
 
-                            
                         </ul>
-                        <!-- === FIN DEL SUBMENÚ === -->
-
-
+                    <!-- === FIN DEL SUBMENÚ === -->
                 </li>
                 
                 <li class="nav-item">
@@ -152,7 +138,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                         <span>Completados</span>
                     </a>
                 </li>
-
 
             </ul>
 
@@ -163,9 +148,8 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                 <span>Cerrar Sesión</span>
             </a>
         </div>
-
+        <!-- CONTENIDO PRINCIPAL -->
         <div class="flex-grow-1 px-3 py-4 p-md-5 overflow-auto">
-            
             <div class="card glass-card p-3 p-md-5 mx-auto" style="width: 100%; max-width: 1000px; text-align: left;">
                 <h2 class="text-white mb-4">Hola <?php echo $_SESSION['username']; ?>, buen <?php echo $diaSemana; ?> 👋</h2>
                 <hr class="text-white opacity-25 mb-4">
@@ -205,7 +189,7 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                                                     <?php echo htmlspecialchars($tarea['titulo']); ?>
                                                 </h5>
                                                 
-                                                <!-- Badge de la lista (opcional, para saber de dónde venía) -->
+                                                <!-- Badge de la lista -->
                                                 <?php if (!empty($tarea['nombre_lista'])): ?>
                                                     <span class="badge rounded-pill" style="background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); font-weight: normal; color: rgba(255,255,255,0.5);">
                                                         <i class="bi bi-folder2 me-1"></i> <?php echo htmlspecialchars($tarea['nombre_lista']); ?>
@@ -265,7 +249,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
     </div>
 </div>
 
-                <!-- ========================================================== -->
                 <!-- ZONA SEGURA DE MODALES (Fuera de los contenedores flex/overflow) -->
                             <!-- MODALES PARA TAREAS -->
                             <?php if (!empty($tareas_usuario)): ?>
@@ -346,8 +329,6 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
                                 <?php endforeach; ?>
                             <?php endif; ?>
                             <!-- FIN DE MODALES PARA TAREAS -->
-                            <!-- ========================================================== -->
-
 
                             <!-- === MODAL PARA VACIAR TODAS LAS TAREAS COMPLETADAS === -->
                             <div class="modal fade" id="modalBorrarCompletadas" tabindex="-1" aria-hidden="true">
@@ -378,8 +359,5 @@ if ($stmt_listas = $conexion->prepare($sql_listas)) {
 
 
                 <!-- FIN DE ZONA DE MODALES -->
-                <!-- ========================================================== -->
-
-
 <script src="assets/js/mostrarFormularioTarea.js"></script>
 <?php include 'includes/footer.php'; ?>

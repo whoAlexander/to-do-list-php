@@ -2,7 +2,6 @@
     const btnCancelarLista = document.getElementById('btn-cancelar-lista');
     const formularioLista = document.getElementById('formulario-lista');
     const inputLista = formularioLista.querySelector('input[name="nombre_lista"]');
-
     
     btnMostrarLista.addEventListener('click', function() {
         formularioLista.classList.remove('d-none'); // Quitamos la clase que lo oculta

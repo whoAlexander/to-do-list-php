@@ -11,8 +11,6 @@ require '../config/conexion.php';
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id_tarea = intval($_GET['id']);
     $usuario_id = $_SESSION['usuario_id'];
-
-    // ¡Aquí está la magia! Cambiamos el estado de vuelta a 0
     $sql = "UPDATE tareas SET estado = 0 WHERE id_tarea = ? AND usuario_id = ?";
     
     if ($stmt = $conexion->prepare($sql)) {

@@ -1,22 +1,17 @@
 <?php
 session_start();
 
-// 1. Validamos sesión
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login.php");
     exit();
 }
 
 require '../config/conexion.php';
-
-// 2. Verificamos que se reciba el ID de la tarea por la URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     
     $id_tarea = intval($_GET['id']); 
     $usuario_id = $_SESSION['usuario_id'];
 
-    // 3. Preparamos la consulta para eliminar
-    // SIEMPRE validamos con usuario_id para que nadie borre tareas de otros
     $sql = "DELETE FROM tareas WHERE id_tarea = ? AND usuario_id = ?";
     
     if ($stmt = $conexion->prepare($sql)) {
@@ -41,10 +36,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     header("Location: " . $ruta_retorno);
     exit();
 }
-
 $conexion->close();
     
-    // Preguntamos: "¿De qué página venía el usuario?" Si no sabemos, lo mandamos al dashboard por defecto.
     $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
     header("Location: " . $ruta_retorno);
     exit();

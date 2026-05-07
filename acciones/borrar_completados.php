@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Validamos sesión
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login.php");
     exit();
@@ -11,14 +10,13 @@ require '../config/conexion.php';
 
 $usuario_id = $_SESSION['usuario_id'];
 
-// Preparamos la consulta: Borrar donde usuario coincida Y el estado sea 1 (completada)
 $sql = "DELETE FROM tareas WHERE usuario_id = ? AND estado = 1";
 
 if ($stmt = $conexion->prepare($sql)) {
     $stmt->bind_param("i", $usuario_id);
     
     if ($stmt->execute()) {
-        // affected_rows nos dice exactamente cuántas tareas se borraron de un plumazo
+        // affected_rows nos dice exactamente cuántas tareas se borraron
         if ($stmt->affected_rows > 0) {
             $_SESSION['alerta_flash'] = "¡Se eliminaron " . $stmt->affected_rows . " tareas completadas!";
         } else {

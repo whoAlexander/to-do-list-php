@@ -11,18 +11,16 @@ require '../config/conexion.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Recibimos los datos
-    $titulo_tarea = trim($_POST['nombre_tarea']); // Usamos 'titulo_tarea' para no confundirnos
+    $titulo_tarea = trim($_POST['nombre_tarea']); 
     $descripcion_tarea = trim($_POST['descripcion_tarea']); 
     $lista_id_recibida = $_POST['lista_id'];
     
     $usuario_id = $_SESSION['usuario_id']; 
 
-    // TRUCO PRO: Si la lista es "0" (Bandeja de entrada), le decimos a la BD que sea NULL
     $lista_id_final = ($lista_id_recibida == 0) ? null : $lista_id_recibida;
 
     if (!empty($titulo_tarea)) {
         
-        // MODIFICACIÓN SQL: Usamos 'titulo' tal cual está en tu base de datos
         $sql = "INSERT INTO tareas (usuario_id, titulo, descripcion, lista_id) VALUES (?, ?, ?, ?)";
         
         if ($stmt = $conexion->prepare($sql)) {
@@ -32,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt->execute()) {
                 $_SESSION['alerta_flash'] = "¡Tarea creada con éxito!";
             } else {
-                // Le agregué $stmt->error para que si falla, te diga exactamente por qué
                 $_SESSION['alerta_error'] = "Hubo un error al guardar: " . $stmt->error;
             }
             
@@ -44,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $conexion->close();
     
-    // Preguntamos: "¿De qué página venía el usuario?" Si no sabemos, lo mandamos al dashboard por defecto.
     $ruta_retorno = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../dashboard.php';
     header("Location: " . $ruta_retorno);
     exit();
